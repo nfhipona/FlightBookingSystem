@@ -38,3 +38,9 @@ exports.CART_FETCH_FAILED           = 'Could not fetch cart items';
 exports.CART_FETCH_SUCCESS          = 'Cart items fetched';
 exports.CART_REMOVE_FAILED          = 'Could not remove cart items';
 exports.CART_REMOVE_SUCCESS         = 'Cart items removed';
+exports.CART_CHECKOUT_FAILED        = 'Checkout failed';
+exports.CART_CHECKOUT_SUCCESS       = 'Checkout success';
+
+/** PAYPAL */
+exports.PAYPAL_GEN_TOKEN_FAILED     = 'Could not generate token';
+exports.PAYPAL_GEN_TOKEN_SUCCESS    = 'Token generated';
