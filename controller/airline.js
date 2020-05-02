@@ -3,7 +3,7 @@
 const helper        = require(__dirname + '/../helper/helper.js');
 const c             = require(__dirname + '/../config/constant.js');
 
-module.exports = (database, auth) => {
+module.exports = (database) => {
 
     function create(req, res) {
 
