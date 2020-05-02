@@ -1,5 +1,7 @@
 'use strict';
 
+                    require(__dirname + '/lib/prototype.js'); // load prototypes
+
 const config        = require(__dirname + '/config/config.js');
 const database      = require(__dirname + '/lib/database.js');
 const router        = require(__dirname + '/lib/router.js');

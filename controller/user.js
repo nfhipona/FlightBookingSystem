@@ -98,8 +98,51 @@ module.exports = (database, auth) => {
         _proceed();
     }
 
+    function signup(req, res) {
+
+        const data = req.body;
+
+        function _proceed() {
+
+            const form = {
+                role_id: '', // role uuid
+                email: '',
+                password: ''
+            };
+
+            helper.validateBody(form, data, res, () => {
+
+                database.connection((err, conn) => {
+                    if (err) return helper.sendConnError(res, err, c.DATABASE_CONN_ERROR);
+
+                    _create_user(conn, data);
+                });
+            });
+        }
+
+        function _create_user(conn, data) {
+
+            exports._encrypt_password(data.password, (err, hash) => {
+                if (err) return helper.send400(conn, res, err, c.USER_CREATE_FAILED);
+
+                data.password = hash;
+                const query = 'INSERT INTO user SET ?';
+
+                conn.query(query, [data], (err, rows, _) => {
+                    if (err) return helper.send400(conn, res, err, c.USER_CREATE_FAILED);
+
+                    data.id = rows.insertId;
+                    helper.send200(conn, res, data, c.USER_CREATE_SUCCESS);
+                });
+            });
+        }
+
+        _proceed();
+    }
+
     return {
-        signin
+        signin,
+        signup
     }
 }
 
