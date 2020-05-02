@@ -24,3 +24,9 @@ exports.AIRLINE_CREATE_FAILED       = 'Could not create airline information';
 exports.AIRLINE_CREATE_SUCCESS      = 'Airline information created';
 exports.AIRLINE_FETCH_FAILED        = 'Could not fetch airline information';
 exports.AIRLINE_FETCH_SUCCESS       = 'Airline information fetched';
+
+/** PACKAGE */
+exports.PACKAGE_CREATE_FAILED       = 'Could not create package information';
+exports.PACKAGE_CREATE_SUCCESS      = 'Package information created';
+exports.PACKAGE_FETCH_FAILED        = 'Could not fetch package information';
+exports.PACKAGE_FETCH_SUCCESS       = 'Package information fetched';
