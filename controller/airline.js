@@ -32,11 +32,12 @@ module.exports = (database) => {
             conn.query(query, [data], (err, rows) => {
                 if (err) return helper.send400(conn, res, err, c.AIRLINE_CREATE_FAILED);
 
-                _load_airline(conn, rows.insertId);
+                helper.send200(conn, res, null, c.AIRLINE_CREATE_SUCCESS);
+                // _load_airline(conn, rows.insertId);
             });
         }
 
-        function _load_airline(conn, id) {
+        /*function _load_airline(conn, id) {
 
             const query = `SELECT * FROM airline
                 WHERE id = ?`
@@ -46,7 +47,7 @@ module.exports = (database) => {
 
                 helper.send200(conn, res, rows, c.AIRLINE_CREATE_SUCCESS);
             });
-        }
+        }*/
 
         _proceed();
     }

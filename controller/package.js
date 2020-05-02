@@ -36,11 +36,12 @@ module.exports = (database) => {
             conn.query(query, [data], (err, rows) => {
                 if (err) return helper.send400(conn, res, err, c.PACKAGE_CREATE_FAILED);
 
-                _load_package(conn, rows.insertId);
+                helper.send200(conn, res, null, c.PACKAGE_CREATE_SUCCESS);
+                // _load_package(conn, rows.insertId);
             });
         }
 
-        function _load_package(conn, id) {
+        /*function _load_package(conn, id) {
 
             const query = `SELECT * FROM package
                 WHERE id = ?`
@@ -50,7 +51,7 @@ module.exports = (database) => {
 
                 helper.send200(conn, res, rows, c.PACKAGE_CREATE_SUCCESS);
             });
-        }
+        }*/
 
         _proceed();
     }
