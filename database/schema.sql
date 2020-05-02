@@ -66,6 +66,7 @@ CREATE TABLE `user` (
     `password` varchar(255) NOT NULL,
     `first_name` varchar(50) NOT NULL,
     `last_name` varchar(50) NOT NULL,
+    `activated` tinyint(1) NOT NULL DEFAULT 0,
 
     `deleted` tinyint(1) NOT NULL DEFAULT 0,
     `updatedAt` timestamp NOT NULL DEFAULT CURRENt_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
