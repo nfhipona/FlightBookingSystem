@@ -23,7 +23,8 @@ INSERT INTO `resource` (`id`, `code`, `name`, `description`) VALUES
 (UUID(), 'maintenance', 'Maintenance settings', 'Server maintenance management'),
 
 (UUID(), 'user_management', 'User Management', 'User account management'),
-(UUID(), 'user_account', 'User Account', 'User account management');
+(UUID(), 'user_account', 'User Account', 'User account management'),
+(UUID(), 'name_later', 'Ungroup Resource', '');
 
 --
 -- Data for table `permission`
