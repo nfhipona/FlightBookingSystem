@@ -27,6 +27,10 @@ module.exports = (database) => {
             });
         }
 
+        function _load_current(conn, data) {
+
+        }
+
         function _create_cart(conn, data) {
 
             const query = 'INSERT INTO cart (user_id, package_id, item_count) VALUES ?';
@@ -144,8 +148,38 @@ module.exports = (database) => {
         _proceed();
     }
 
+    function remove(req, res) {
+
+        const decoded = req.get('decoded_token');
+        const pkgId = req.params.id;
+
+        function _proceed() {
+
+            database.connection((err, conn) => {
+                if (err) return helper.sendConnError(res, err, c.DATABASE_CONN_ERROR);
+
+                _remove(conn);
+            });
+        }
+
+        function _remove(conn) {
+
+            const query = `DELETE FROM cart c
+                WHERE c.user_id = ? AND c.package_id = ?`;
+
+            conn.query(query, [decoded.id, pkgId], (err, rows) => {
+                if (err) return helper.send400(conn, res, err, c.CART_REMOVE_FAILED);
+
+                helper.send200(conn, res, { id: pkgId }, c.CART_REMOVE_SUCCESS);
+            });
+        }
+
+        _proceed();
+    }
+
     return {
         add,
-        fetch
+        fetch,
+        remove
     }
 }

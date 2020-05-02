@@ -32,7 +32,9 @@ exports.PACKAGE_FETCH_FAILED        = 'Could not fetch package information';
 exports.PACKAGE_FETCH_SUCCESS       = 'Package information fetched';
 
 /** CART */
-exports.CART_CREATE_FAILED       = 'Could not add item to cart';
-exports.CART_CREATE_SUCCESS      = 'Item added to cart';
-exports.CART_FETCH_FAILED        = 'Could not fetch cart items';
-exports.CART_FETCH_SUCCESS       = 'Cart items fetched';
+exports.CART_CREATE_FAILED          = 'Could not add item to cart';
+exports.CART_CREATE_SUCCESS         = 'Item added to cart';
+exports.CART_FETCH_FAILED           = 'Could not fetch cart items';
+exports.CART_FETCH_SUCCESS          = 'Cart items fetched';
+exports.CART_REMOVE_FAILED          = 'Could not remove cart items';
+exports.CART_REMOVE_SUCCESS         = 'Cart items removed';
