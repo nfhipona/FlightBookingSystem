@@ -12,34 +12,56 @@ module.exports = (database) => {
 
         function _proceed() {
 
-            const form = [{
+            const form = {
                 package_id: '',
                 item_count: 0
-            }];
+            };
 
             helper.validateBody(form, data, res, () => {
+
+                data.user_id = decoded.id;
 
                 database.connection((err, conn) => {
                     if (err) return helper.sendConnError(res, err, c.DATABASE_CONN_ERROR);
 
-                    _create_cart(conn, data);
+                    _check_if_exist(conn, data);
                 });
             });
         }
 
-        function _load_current(conn, data) {
+        function _check_if_exist(conn, data) {
 
+            const query = `SELECT * FROM cart c
+                WHERE c.user_id = ? AND c.package_id = ?`;
+
+            conn.query(query, [decoded.id, data.package_id], (err, rows) => {
+                if (err) return helper.send400(conn, res, err, c.CART_CREATE_FAILED);
+
+                if (rows.length > 0) {
+                    _update_cart(conn, data);
+                }else{
+                    _create_cart(conn, data);
+                }
+            });
+        }
+
+        function _update_cart(conn, data) {
+
+            const query = `UPDATE cart c SET c.item_count = ?
+                WHERE c.user_id = ? AND c.package_id = ?`;
+
+            conn.query(query, [data.item_count, data.user_id, data.package_id], (err, rows) => {
+                if (err) return helper.send400(conn, res, err, c.CART_CREATE_FAILED);
+
+                helper.send200(conn, res, null, c.CART_CREATE_SUCCESS);
+            });
         }
 
         function _create_cart(conn, data) {
 
-            const query = 'INSERT INTO cart (user_id, package_id, item_count) VALUES ?';
+            const query = 'INSERT INTO cart SET ?';
 
-            const cart_items = data.map(e => {
-                return [decoded.id, e.package_id, e.item_count];
-            });
-
-            conn.query(query, [cart_items], (err, rows) => {
+            conn.query(query, data, (err, rows) => {
                 if (err) return helper.send400(conn, res, err, c.CART_CREATE_FAILED);
 
                 helper.send200(conn, res, null, c.CART_CREATE_SUCCESS);
@@ -151,7 +173,7 @@ module.exports = (database) => {
     function remove(req, res) {
 
         const decoded = req.get('decoded_token');
-        const pkgId = req.params.id;
+        const pkgId = req.params.pkgId;
 
         function _proceed() {
 
@@ -164,11 +186,11 @@ module.exports = (database) => {
 
         function _remove(conn) {
 
-            const query = `DELETE FROM cart c
-                WHERE c.user_id = ? AND c.package_id = ?`;
+            const query = `DELETE FROM cart
+                WHERE user_id = ? AND package_id = ?`;
 
             conn.query(query, [decoded.id, pkgId], (err, rows) => {
-                if (err) return helper.send400(conn, res, err, c.CART_REMOVE_FAILED);
+                if (err || rows.affectedRows == 0) return helper.send400(conn, res, err, c.CART_REMOVE_FAILED);
 
                 helper.send200(conn, res, { id: pkgId }, c.CART_REMOVE_SUCCESS);
             });
