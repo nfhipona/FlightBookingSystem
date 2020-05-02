@@ -32,6 +32,6 @@ INSERT INTO `resource` (`id`, `code`, `name`, `description`) VALUES
 
 INSERT INTO `permission` (`role_id`, `resource_id`, `mode`, `is_disabled`) VALUES
 -- sup_admin
-('2c41860a-8c3e-11ea-b57f-acde48001122', 'a67a9b84-8c46-11ea-b57f-acde48001122', 'r', 0), -- resource
-('2c41860a-8c3e-11ea-b57f-acde48001122', 'a67a9b84-8c46-11ea-b57f-acde48001122', 'w', 0),
-('2c41860a-8c3e-11ea-b57f-acde48001122', 'a67a9b84-8c46-11ea-b57f-acde48001122', 'd', 0);
+('be72f6c2-8c47-11ea-b57f-acde48001122', 'becae3d2-8c47-11ea-b57f-acde48001122', 'r', 0), -- resource
+('be72f6c2-8c47-11ea-b57f-acde48001122', 'becae3d2-8c47-11ea-b57f-acde48001122', 'w', 0),
+('be72f6c2-8c47-11ea-b57f-acde48001122', 'becae3d2-8c47-11ea-b57f-acde48001122', 'd', 0);
