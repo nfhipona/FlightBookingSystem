@@ -144,9 +144,15 @@ module.exports = (database, auth) => {
         _proceed();
     }
 
+    function signout(req, res) {
+
+        auth.signout(req, res);
+    }
+
     return {
         signin,
-        signup
+        signup,
+        signout
     }
 }
 
