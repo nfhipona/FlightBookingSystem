@@ -1,5 +1,7 @@
 'use strict';
 
+exports.LIMIT = 0;
+
 /** PERMISSION **/
 exports.PERMISSION_DENIED           = 'Permission denied';
 exports.UNAUTHORIZED_REQUEST        = 'Unauthorized request';
@@ -16,3 +18,9 @@ exports.USER_SIGNIN_SUCCESS         = 'Signed in success';
 exports.USER_SIGNED_OUT             = 'You have logged out';
 exports.USER_CREATE_FAILED          = 'Could not create user';
 exports.USER_CREATE_SUCCESS         = 'User created';
+
+/** AIRLINE */
+exports.AIRLINE_CREATE_FAILED       = 'Could not create airline information';
+exports.AIRLINE_CREATE_SUCCESS      = 'Airline information created';
+exports.AIRLINE_FETCH_FAILED        = 'Could not fetch airline information';
+exports.AIRLINE_FETCH_SUCCESS       = 'Airline information fetched';
