@@ -135,7 +135,7 @@ module.exports = (database, auth) => {
                 conn.query(query, [data], (err, rows, _) => {
                     if (err) return helper.send400(conn, res, err, c.USER_CREATE_FAILED);
 
-                    data.id = rows.insertId;
+                    delete data.password;
                     helper.send200(conn, res, data, c.USER_CREATE_SUCCESS);
                 });
             });

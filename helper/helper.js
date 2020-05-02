@@ -210,3 +210,15 @@ exports.combineObject = (object, toObject) => {
 
     return toObject
 }
+
+exports.randString = (length) => {
+
+	let randString = "";
+	let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+
+	for (let i = 0; i < length; i++) {
+		randString += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+
+	return randString;
+}

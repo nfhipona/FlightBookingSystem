@@ -4,7 +4,7 @@
 const expect            =   require('chai').expect;
 const request           =   require('supertest');
 const config            =   require(__dirname + '/../config/config.js');
-const apiURL            =   config.development;
+const apiURL            =   config.development.api;
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
