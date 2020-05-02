@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
     `id` varchar(36) NOT NULL,
     `role_id` varchar(36) NOT NULL,
-    `username` varchar(30) NOT NULL,
+    `email` varchar(30) NOT NULL,
     `password` varchar(255) NOT NULL,
     `first_name` varchar(50) NOT NULL,
     `last_name` varchar(50) NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE `user` (
     `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT `user_id_pk` PRIMARY KEY (`id`),
-    CONSTRAINT `user_username_u_key` UNIQUE (`username`),
+    CONSTRAINT `user_email_u_key` UNIQUE (`email`),
     CONSTRAINT `user_role_id_fk` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
 );
 
