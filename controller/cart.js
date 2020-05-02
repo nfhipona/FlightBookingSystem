@@ -149,7 +149,19 @@ module.exports = (database) => {
 
         function _get_all(conn) {
 
-            const query = `SELECT c.* FROM cart c
+            const fields = [
+                'c.*',
+                'u.email',
+                'u.first_name',
+                'u.last_name',
+                'p.name AS package_name',
+                'p.rate AS package_rate',
+                'p.from_address',
+                'p.to_address',
+                'a.name AS airline_name'
+            ].join(', ');
+
+            const query = `SELECT ${fields} FROM cart c
                 INNER JOIN user u ON u.id = c.user_id
                 INNER JOIN package p ON p.id = c.package_id
                 INNER JOIN airline a ON a.id = p.airline_id
