@@ -140,7 +140,7 @@ module.exports = (database) => {
             });
         }
 
-        function _get_items(conn) {
+        function _get_all(conn) {
 
             let query = 'SELECT a.* FROM airline a';
             let where = [], values = [];
