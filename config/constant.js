@@ -30,3 +30,9 @@ exports.PACKAGE_CREATE_FAILED       = 'Could not create package information';
 exports.PACKAGE_CREATE_SUCCESS      = 'Package information created';
 exports.PACKAGE_FETCH_FAILED        = 'Could not fetch package information';
 exports.PACKAGE_FETCH_SUCCESS       = 'Package information fetched';
+
+/** CART */
+exports.CART_CREATE_FAILED       = 'Could not add item to cart';
+exports.CART_CREATE_SUCCESS      = 'Item added to cart';
+exports.CART_FETCH_FAILED        = 'Could not fetch cart items';
+exports.CART_FETCH_SUCCESS       = 'Cart items fetched';
