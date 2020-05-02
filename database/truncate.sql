@@ -1,0 +1,9 @@
+USE fbsdb;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE `role`;
+TRUNCATE TABLE `resource`;
+TRUNCATE TABLE `permission`;
+
+SET FOREIGN_KEY_CHECKS = 1;
