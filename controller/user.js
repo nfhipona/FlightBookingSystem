@@ -6,7 +6,8 @@ const config        = require(__dirname + '/../config/config.js');
 const util          = require(__dirname + '/../lib/util.js');
 
 // For encrypting and decrypting password
-const bcrypt = require('bcrypt');
+const bcrypt        = require('bcrypt');
+const bcryptConf    = config.bcryptConfig;
 
 module.exports = (database, auth) => {
 
@@ -66,7 +67,7 @@ module.exports = (database, auth) => {
 
                     _check_login_permission(record);
                 } else {
-                    helper.send400(res, err, c.USER_SIGNIN_FAILED);
+                    helper.send400(conn, res, err, c.USER_SIGNIN_FAILED);
                 }
             });
         }
@@ -107,7 +108,9 @@ module.exports = (database, auth) => {
             const form = {
                 role_id: '', // role uuid
                 email: '',
-                password: ''
+                password: '',
+                first_name: '',
+                last_name: ''
             };
 
             helper.validateBody(form, data, res, () => {
@@ -125,6 +128,7 @@ module.exports = (database, auth) => {
             exports._encrypt_password(data.password, (err, hash) => {
                 if (err) return helper.send400(conn, res, err, c.USER_CREATE_FAILED);
 
+                data.activated = 1; // should not be hardcoded activation
                 data.password = hash;
                 const query = 'INSERT INTO user SET ?';
 
