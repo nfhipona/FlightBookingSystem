@@ -24,23 +24,58 @@ module.exports = (database) => {
         function _proceed() {
 
             const form = {
-                items: [
-                    {
-                        name: "",
-                        sku: "",
-                        price: 0.0,
-                        currency: "", // USD
-                        quantity: 1
-                    }
-                ],
-                currency: "", // USD
+                currency: "",
                 message: ''
             };
 
             helper.validateBody(form, data, res, () => {
 
-                _paypal_checkout(data);
+                _load_cart_items(data);
             });
+        }
+
+        function _load_cart_items(data) {
+
+            database.connection((err, conn) => {
+                if (err) return helper.sendConnError(res, err, c.DATABASE_CONN_ERROR);
+
+                const fields = [
+                    'c.*',
+                    'u.email',
+                    'u.first_name',
+                    'u.last_name',
+                    'p.name AS package_name',
+                    'p.rate AS package_rate',
+                    'p.from_address',
+                    'p.to_address',
+                    'a.name AS airline_name'
+                ].join(', ');
+
+                const query = `SELECT ${fields} FROM cart c
+                    INNER JOIN user u ON u.id = c.user_id
+                    INNER JOIN package p ON p.id = c.package_id
+                    INNER JOIN airline a ON a.id = p.airline_id
+                    WHERE c.user_id = ?`;
+
+                conn.query(query, [decoded.id], (err, rows) => {
+                    if (err) return helper.send400(conn, res, err, c.CART_CHECKOUT_FAILED);
+                    database.done(conn);
+
+                    let items = [];
+                    for (const item of rows) {
+                        items.push({
+                            name: item.package_name,
+                            sku: item.package_id,
+                            price: item.package_rate,
+                            currency: "USD",
+                            quantity: item.item_count
+                        });
+                    }
+
+                    data.items = items;
+                    _paypal_checkout(data);
+                });
+            })
         }
 
         function _paypal_checkout(data) {
@@ -101,13 +136,63 @@ module.exports = (database) => {
 
         function _proceed() {
 
+            database.connection((err, conn) => {
+                if (err) return helper.sendConnError(res, err, c.DATABASE_CONN_ERROR);
+
+                const fields = [
+                    'c.*',
+                    'u.email',
+                    'u.first_name',
+                    'u.last_name',
+                    'p.name AS package_name',
+                    'p.rate AS package_rate',
+                    'p.from_address',
+                    'p.to_address',
+                    'a.name AS airline_name'
+                ].join(', ');
+
+                const query = `SELECT ${fields} FROM cart c
+                    INNER JOIN user u ON u.id = c.user_id
+                    INNER JOIN package p ON p.id = c.package_id
+                    INNER JOIN airline a ON a.id = p.airline_id
+                    WHERE c.user_id = ?`;
+
+                conn.query(query, [decoded.id], (err, rows) => {
+                    if (err) return helper.send400(conn, res, err, c.CART_CHECKOUT_FAILED);
+                    database.done(conn);
+
+                    let items = [];
+                    for (const item of rows) {
+                        items.push({
+                            name: item.package_name,
+                            sku: item.package_id,
+                            price: item.package_rate,
+                            currency: "USD",
+                            quantity: item.item_count
+                        });
+                    }
+
+                    _construct_json(items);
+                });
+            });
+        }
+
+        function _construct_json(items) {
+
+            let totalAmt = 0;
+            for (const item of items) {
+                totalAmt += Number(item.price) * Number(item.quantity);
+            }
+
+            const amount = {
+                currency: 'USD',
+                total: totalAmt
+            };
+
             const payment_json = {
                 "payer_id": payerId,
                 "transactions": [{
-                    "amount": {
-                        "currency": "USD",
-                        "total": "1.00"
-                    }
+                    "amount": amount
                 }]
             };
 
