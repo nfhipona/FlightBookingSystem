@@ -12,7 +12,7 @@ module.exports = (database) => {
         function _proceed() {
 
             const form = {
-                package_id: '',
+                airline_id: '',
                 name: '',
                 rate: 0.0,
                 from_address: '',
@@ -144,7 +144,7 @@ module.exports = (database) => {
             });
         }
 
-        function _get_items(conn) {
+        function _get_all(conn) {
 
             let query = 'SELECT p.* FROM package p';
             let where = [], values = [];
