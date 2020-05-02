@@ -33,6 +33,7 @@ exports.jwtConfig           = helper.parseSettingsConfig(env.JWT_CONFIG);
 exports.redisConfig         = helper.parseSettingsConfig(env.REDIS);
 
 exports.development         = helper.parseSettingsConfig(env.DEVELOPMENT_ENV);
+exports.paypal              = helper.parseSettingsConfig(env.PAYPAL);
 
 exports.bcryptConfig = {
     rounds: 10
