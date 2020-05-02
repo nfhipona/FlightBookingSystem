@@ -69,6 +69,9 @@ module.exports = (database) => {
         function _get_item_count(conn) {
 
             const query = `SELECT COUNT(c.user_id) AS item_count FROM cart c
+                INNER JOIN user u ON u.id = c.user_id
+                INNER JOIN package p ON p.id = c.package_id
+                INNER JOIN airline a ON a.id = p.airline_id
                 WHERE c.user_id = ?`;
 
             conn.query(query, [decoded.id], (err, rows) => {
@@ -91,7 +94,22 @@ module.exports = (database) => {
                 return _success_response(conn, data);
             }
 
-            const query = `SELECT c.* FROM cart c
+            const fields = [
+                'c.*',
+                'u.email',
+                'u.first_name',
+                'u.last_name',
+                'p.name AS package_name',
+                'p.rate AS package_rate',
+                'p.from_address',
+                'p.to_address',
+                'a.name AS airline_name'
+            ].join(', ');
+
+            const query = `SELECT ${fields} FROM cart c
+                INNER JOIN user u ON u.id = c.user_id
+                INNER JOIN package p ON p.id = c.package_id
+                INNER JOIN airline a ON a.id = p.airline_id
                 WHERE c.user_id = ?
                 LIMIT ? OFFSET ?`;
 
@@ -106,6 +124,9 @@ module.exports = (database) => {
         function _get_all(conn) {
 
             const query = `SELECT c.* FROM cart c
+                INNER JOIN user u ON u.id = c.user_id
+                INNER JOIN package p ON p.id = c.package_id
+                INNER JOIN airline a ON a.id = p.airline_id
                 WHERE c.user_id = ?`;
 
             conn.query(query, [decoded.id], (err, rows) => {
