@@ -30,8 +30,8 @@ INSERT INTO `resource` (`id`, `code`, `name`, `description`) VALUES
 -- Data for table `permission`
 --
 
--- INSERT INTO `permission` (`role_id`, `resource_id`, `mode`, `is_disabled`) VALUES
--- -- sup_admin
--- (uuid(), uuid(), 'r', 0), -- resource
--- (uuid(), uuid(), 'w', 0),
--- (uuid(), uuid(), 'd', 0);
+INSERT INTO `permission` (`role_id`, `resource_id`, `mode`, `is_disabled`) VALUES
+-- sup_admin
+('2c41860a-8c3e-11ea-b57f-acde48001122', 'a67a9b84-8c46-11ea-b57f-acde48001122', 'r', 0), -- resource
+('2c41860a-8c3e-11ea-b57f-acde48001122', 'a67a9b84-8c46-11ea-b57f-acde48001122', 'w', 0),
+('2c41860a-8c3e-11ea-b57f-acde48001122', 'a67a9b84-8c46-11ea-b57f-acde48001122', 'd', 0);

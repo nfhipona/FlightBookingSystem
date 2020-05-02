@@ -58,6 +58,35 @@ CREATE TABLE `permission` (
     CONSTRAINT `permission_resource_id_fk` FOREIGN KEY (`resource_id`) REFERENCES `resource` (`id`) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS `maintenance`;
+CREATE TABLE `maintenance` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+
+    `title` varchar(255) NOT NULL,
+    `description` varchar(255) DEFAULT '',
+    `message` text DEFAULT '',
+    `is_down` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 - SERVER_DOWN | 0 - SERVER_UP',
+
+    `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT `maintenance_history_id_pk` PRIMARY KEY (`id`)
+);
+
+DROP TABLE IF EXISTS `maintenance_history`;
+CREATE TABLE `maintenance_history` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+
+    `title` varchar(255) NOT NULL,
+    `description` varchar(255) DEFAULT '',
+    `message` text DEFAULT '',
+    `status` varchar(20) NOT NULL DEFAULT 0 COMMENT '1 - SERVER_DOWN | 0 - SERVER_UP',
+
+    `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT `maintenance_history_id_pk` PRIMARY KEY (`id`)
+);
+
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
     `id` varchar(36) NOT NULL,
