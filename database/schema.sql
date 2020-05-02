@@ -8,7 +8,7 @@ USE fbsdb;
 
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
-    `id` varchar(36) NOT NULL,
+    `id` varchar(36) NOT NULL DEFAULT UUID(),
     `name` varchar(255) NOT NULL,
     `code` varchar(255) NOT NULL,
     `description` varchar(255),
@@ -26,7 +26,7 @@ CREATE TABLE `role` (
 
 DROP TABLE IF EXISTS `resource`;
 CREATE TABLE `resource` (
-    `id` varchar(36) NOT NULL,
+    `id` varchar(36) NOT NULL DEFAULT UUID(),
     `name` varchar(150) NOT NULL COMMENT 'resource access name',
     `code` varchar(255) NOT NULL COMMENT 'resource access unique code',
     `description` varchar(255) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE `resource` (
 
 DROP TABLE IF EXISTS `permission`;
 CREATE TABLE `permission` (
-    `role_id` varchar(36) NOT NULL,
+    `role_id` varchar(36) NOT NULL DEFAULT UUID(),
     `resource_id` varchar(36) NOT NULL,
     `mode` varchar(5) NOT NULL COMMENT '+r, +w, +d',
 
@@ -60,7 +60,7 @@ CREATE TABLE `permission` (
 
 DROP TABLE IF EXISTS `maintenance`;
 CREATE TABLE `maintenance` (
-    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    `id` varchar(36) NOT NULL DEFAULT UUID(),
 
     `title` varchar(255) NOT NULL,
     `description` varchar(255) DEFAULT '',
@@ -70,13 +70,12 @@ CREATE TABLE `maintenance` (
     `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT `maintenance_history_id_pk` PRIMARY KEY (`id`)
+    CONSTRAINT `maintenance_id_pk` PRIMARY KEY (`id`)
 );
 
 DROP TABLE IF EXISTS `maintenance_history`;
 CREATE TABLE `maintenance_history` (
-    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-
+    `id` varchar(36) NOT NULL DEFAULT UUID(),
     `title` varchar(255) NOT NULL,
     `description` varchar(255) DEFAULT '',
     `message` text DEFAULT '',
@@ -89,7 +88,7 @@ CREATE TABLE `maintenance_history` (
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-    `id` varchar(36) NOT NULL,
+    `id` varchar(36) NOT NULL DEFAULT UUID(),
     `role_id` varchar(36) NOT NULL,
     `email` varchar(30) NOT NULL,
     `password` varchar(255) NOT NULL,
@@ -108,7 +107,7 @@ CREATE TABLE `user` (
 
 DROP TABLE IF EXISTS `airline`;
 CREATE TABLE `airline` (
-    `id` varchar(36) NOT NULL,
+    `id` varchar(36) NOT NULL DEFAULT UUID(),
     `name` varchar(30) NOT NULL,
 
     `deleted` tinyint(1) NOT NULL DEFAULT 0,
@@ -120,7 +119,7 @@ CREATE TABLE `airline` (
 
 DROP TABLE IF EXISTS `package`;
 CREATE TABLE `package` (
-    `id` varchar(36) NOT NULL,
+    `id` varchar(36) NOT NULL DEFAULT UUID(),
     `airline_id` varchar(36) NOT NULL,
     `name` varchar(30) NOT NULL,
     `rate` decimal(15,4) NOT NULL,
@@ -137,7 +136,7 @@ CREATE TABLE `package` (
 
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
-    `id` varchar(36) NOT NULL,
+    `id` varchar(36) NOT NULL DEFAULT UUID(),
     `package_id` varchar(36) NOT NULL,
     `user_id` varchar(36) NOT NULL,
 
@@ -152,7 +151,7 @@ CREATE TABLE `order` (
 
 DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
-    `user_id` varchar(36) NOT NULL,
+    `user_id` varchar(36) NOT NULL DEFAULT UUID(),
     `package_id` varchar(36) NOT NULL,
     `item_count` Int(5) NOT NULL DEFAULT 0,
 
