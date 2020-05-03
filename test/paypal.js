@@ -78,10 +78,10 @@ describe('PAYPAL ENDPOINT UNIT TEST', () => {
         });
     });
 
-    it('POST /paypal/pay -- paypal checkout', done => {
+    it('POST /paypal/checkout -- paypal checkout', done => {
 
         api
-        .post('/paypal/pay')
+        .post('/paypal/checkout')
         .set(headers)
         .set(t(token))
         .send({
@@ -89,12 +89,8 @@ describe('PAYPAL ENDPOINT UNIT TEST', () => {
         })
         .expect(200)
         .end((err, res) => {
-            if (err) { // 302
-                res.header['location'].should.include('paypal');
-                return done();
-            }
-
-            expect(res.body.success).to.be.true;
+            const location = res.header['location'];
+            location.should.have.include('paypal'); // 302
 
             done();
         });
