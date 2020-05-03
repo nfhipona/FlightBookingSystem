@@ -3,7 +3,7 @@
 const h                             =   require(__dirname + '/../helper/helper.js');
 const { api, expect, headers, t }   =   require(__dirname + '/base.js');
 
-describe('USERS UNIT TEST', () => {
+describe('USERS ENDPOINT UNIT TEST', () => {
 
     let email;
     it('POST /users/signup -- sign-up to create an account', done => {
