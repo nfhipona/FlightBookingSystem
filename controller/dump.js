@@ -6,6 +6,7 @@ const config        = require(__dirname + '/../config/config.js').dbConfig;
 
 const exec          = require('child_process').exec;
 const fs            = require('fs');
+var mime            = require('mime');
 
 module.exports = (database) => {
 
@@ -27,13 +28,13 @@ module.exports = (database) => {
                   return helper.send400(null, res, error, c.DUMP_FAILED);
                 }
 
-                const file = fs.createWriteStream(file_loc);
+                const mimetype = mime.lookup(file_loc);
+                res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+                res.setHeader('Content-type', mimetype);
 
-                req.pipe(file);
-                helper.send200(null, res, { message: filename }, c.DUMP_SUCCESS);
+                const filestream = fs.createReadStream(file_loc);
+                filestream.pipe(res);
             });
-
-
         }
 
         _proceed();
