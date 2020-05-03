@@ -131,6 +131,7 @@ module.exports = (database) => {
 
     function execute(req, res) {
 
+        const decoded = req.get('decoded_token');
         const payerId = req.query.PayerID;
         const paymentId = req.query.paymentId;
 
@@ -159,7 +160,6 @@ module.exports = (database) => {
 
                 conn.query(query, [decoded.id], (err, rows) => {
                     if (err) return helper.send400(conn, res, err, c.CART_CHECKOUT_FAILED);
-                    database.done(conn);
 
                     let items = [];
                     for (const item of rows) {
@@ -172,12 +172,12 @@ module.exports = (database) => {
                         });
                     }
 
-                    _construct_json(items);
+                    _construct_json(conn, items);
                 });
             });
         }
 
-        function _construct_json(items) {
+        function _construct_json(conn, items) {
 
             let totalAmt = 0;
             for (const item of items) {
@@ -196,17 +196,28 @@ module.exports = (database) => {
                 }]
             };
 
-            _execute_payment(payment_json)
+            _execute_payment(conn, payment_json)
         }
 
-        function _execute_payment(payment_json) {
+        function _execute_payment(conn, payment_json) {
 
             paypal.payment.execute(paymentId, payment_json, function (err, payment) {
                 if (err) {
                     helper.send400(null, res, err, c.CART_CHECKOUT_FAILED);
                 } else {
-                    helper.send200(null, res, { message: payment }, c.CART_CHECKOUT_SUCCESS);
+                    _clear_cart(conn, payment);
                 }
+            });
+        }
+
+        function _clear_cart(conn, payment) {
+
+            const query = `DELETE * FROM cart
+                WHERE user_id = ?`;
+
+            conn.query(query, [decoded.id], (err, rows) => {
+
+                helper.send200(null, res, { message: payment }, c.CART_CHECKOUT_SUCCESS);
             });
         }
 
