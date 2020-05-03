@@ -24,7 +24,6 @@ module.exports = (database) => {
         function _proceed() {
 
             const form = {
-                currency: "",
                 message: ''
             };
 
@@ -88,7 +87,7 @@ module.exports = (database) => {
             }
 
             const amount = {
-                currency: data.currency,
+                currency: 'USD',
                 total: totalAmt
             };
 
