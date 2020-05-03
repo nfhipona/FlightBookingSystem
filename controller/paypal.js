@@ -109,8 +109,8 @@ module.exports = (database) => {
                 }]
             };
 
-            paypal.payment.create(create_payment_json, function (error, payment) {
-                if (error) {
+            paypal.payment.create(create_payment_json, function (err, payment) {
+                if (err) {
                     helper.send400(null, res, err, c.CART_CHECKOUT_FAILED);
                 } else {
 
@@ -200,9 +200,9 @@ module.exports = (database) => {
 
         function _execute_payment(payment_json) {
 
-            paypal.payment.execute(paymentId, payment_json, function (error, payment) {
-                if (error) {
-                    helper.send400(null, res, error, c.CART_CHECKOUT_FAILED);
+            paypal.payment.execute(paymentId, payment_json, function (err, payment) {
+                if (err) {
+                    helper.send400(null, res, err, c.CART_CHECKOUT_FAILED);
                 } else {
                     helper.send200(null, res, { message: payment }, c.CART_CHECKOUT_SUCCESS);
                 }
