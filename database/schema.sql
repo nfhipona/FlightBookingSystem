@@ -158,3 +158,14 @@ CREATE TABLE `cart` (
     CONSTRAINT `cart_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
     CONSTRAINT `cart_package_id_fk` FOREIGN KEY (`package_id`) REFERENCES `package` (`id`) ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS `audit_log`;
+CREATE TABLE `audit_log` (
+    `id` varchar(36) NOT NULL DEFAULT UUID(),
+    `user_id` varchar(36) NOT NULL,
+    `message` varchar(255) NOT NULL,
+    `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT `audit_log_id_pk` PRIMARY KEY (`id`),
+    CONSTRAINT `audit_log_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+);
