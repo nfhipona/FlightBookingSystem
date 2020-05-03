@@ -44,6 +44,7 @@ function start() {
         .send({
             version: pjson.version,
             message: 'Welcome to FBS API',
+            docs: 'https://documenter.getpostman.com/view/3554620/SzmZdg4o?version=latest'
         })
         .end();
     });
