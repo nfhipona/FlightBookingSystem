@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "test": "mocha --reporter mochawesome",
+    "test": "mocha --timeout 15000 --reporter mochawesome",
     "start": "node app.js"
   },
   "dependencies": {
