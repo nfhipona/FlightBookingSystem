@@ -44,3 +44,7 @@ exports.CART_CHECKOUT_SUCCESS       = 'Checkout success';
 /** PAYPAL */
 exports.PAYPAL_GEN_TOKEN_FAILED     = 'Could not generate token';
 exports.PAYPAL_GEN_TOKEN_SUCCESS    = 'Token generated';
+
+/** DUMP */
+exports.DUMP_FAILED                 = 'Could create dump file';
+exports.DUMP_SUCCESS                = 'Dump file created';
