@@ -94,7 +94,9 @@ describe('PAYPAL ENDPOINT UNIT TEST', () => {
                 return done();
             }
 
-            done(new Error('Should have 302'));
+            expect(res.body.success).to.be.true;
+
+            done();
         });
     });
 
