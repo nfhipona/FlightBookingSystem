@@ -137,7 +137,14 @@ module.exports = (database) => {
 
         function _proceed() {
 
-            database.connection((err, conn) => {
+            if (!payerId || !paymentId) return helper.send400(null, res, { message: 'Missing payment details' }, c.CART_CHECKOUT_FAILED);
+
+            _load_cart_items();
+        }
+
+        function _load_cart_items() {
+
+            database.transaction((err, conn) => {
                 if (err) return helper.sendConnError(res, err, c.DATABASE_CONN_ERROR);
 
                 const fields = [
@@ -159,7 +166,13 @@ module.exports = (database) => {
                     WHERE c.user_id = ?`;
 
                 conn.query(query, [decoded.id], (err, rows) => {
-                    if (err) return helper.send400(conn, res, err, c.CART_CHECKOUT_FAILED);
+                    if (err) return database.rollback(conn, () => {
+                        helper.send400(null, res, err, c.CART_CHECKOUT_FAILED);
+                    });
+
+                    if (rows.length == 0) return database.rollback(conn, () => {
+                        helper.send400(null, res, { message: 'No items to buy' }, c.CART_CHECKOUT_FAILED);
+                    });
 
                     let items = [];
                     for (const item of rows) {
@@ -196,28 +209,49 @@ module.exports = (database) => {
                 }]
             };
 
-            _execute_payment(conn, payment_json)
+            _audit(conn, payment_json)
+        }
+
+        function _audit(conn, payment_json) {
+
+            const message = `${decoded.email} has made a purchase`;
+            const query = 'CALL LogUser(?, ?)';
+
+            conn.query(query, [decoded.id, message], (err, rows) => {
+                if (err) return database.rollback(conn, () => {
+                    helper.send400(null, res, err, c.CART_CHECKOUT_FAILED);
+                });
+
+                _clear_cart(conn, payment_json);
+            });
+        }
+
+        function _clear_cart(conn, payment_json) {
+
+            const query = `DELETE FROM cart
+                WHERE user_id = ?`;
+
+            conn.query(query, [decoded.id], (err, rows) => {
+                if (err) return database.rollback(conn, () => {
+                    helper.send400(null, res, err, c.CART_CHECKOUT_FAILED);
+                });
+
+                _execute_payment(conn, payment_json);
+            });
         }
 
         function _execute_payment(conn, payment_json) {
 
             paypal.payment.execute(paymentId, payment_json, function (err, payment) {
-                if (err) {
+                if (err) return database.rollback(conn, () => {
                     helper.send400(null, res, err, c.CART_CHECKOUT_FAILED);
-                } else {
-                    _clear_cart(conn, payment);
-                }
-            });
-        }
+                });
 
-        function _clear_cart(conn, payment) {
+                database.commit(conn, err => {
+                    if (err) return helper.send400(null, res, err, c.CART_CHECKOUT_FAILED);
 
-            const query = `DELETE * FROM cart
-                WHERE user_id = ?`;
-
-            conn.query(query, [decoded.id], (err, rows) => {
-
-                helper.send200(null, res, { message: payment }, c.CART_CHECKOUT_SUCCESS);
+                    helper.send200(null, res, { message: payment }, c.CART_CHECKOUT_SUCCESS);
+                });
             });
         }
 
