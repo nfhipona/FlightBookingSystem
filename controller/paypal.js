@@ -58,6 +58,7 @@ module.exports = (database) => {
 
                 conn.query(query, [decoded.id], (err, rows) => {
                     if (err) return helper.send400(conn, res, err, c.CART_CHECKOUT_FAILED);
+                    if (rows.length == 0) return helper.send400(conn, res, { message: 'Cart is empty' }, c.CART_CHECKOUT_FAILED);
                     database.done(conn);
 
                     let items = [];
