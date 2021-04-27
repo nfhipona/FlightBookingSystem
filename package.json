@@ -25,7 +25,7 @@
     "node-mysql": "^0.4.2",
     "nodemailer": "^6.4.2",
     "paypal-rest-sdk": "^1.8.1",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
